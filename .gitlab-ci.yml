@@ -404,6 +404,10 @@ build_windows_msi_x64:
     - mkdir %GOPATH%\src\github.com\DataDog\datadog-agent
     - xcopy /q/h/e/s * %GOPATH%\src\github.com\DataDog\datadog-agent
     - cd %GOPATH%\src\github.com\DataDog\datadog-agent
+    - git rev-parse HEAD
+    - cd omnibus
+    - bundle update
+    - cd %GOPATH%\src\github.com\DataDog\datadog-agent
     - inv -e deps
   stage: package_build
   variables:
