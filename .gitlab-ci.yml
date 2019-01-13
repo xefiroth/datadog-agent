@@ -617,7 +617,7 @@ deploy_windows_testing:
 # run dd-agent-testing on windows
 kitchen_windows:
   stage: testkitchen_testing
-  allow_failure: true
+  allow_failure: false
   image: 486234852809.dkr.ecr.us-east-1.amazonaws.com/ci/datadog-agent-builders/dd-agent-testing:latest
   <<: *run_when_testkitchen_triggered
   before_script:
@@ -641,7 +641,7 @@ kitchen_windows:
 
 kitchen_windows_installer:
   stage: testkitchen_testing
-  allow_failure: true
+  allow_failure: false
   image: 486234852809.dkr.ecr.us-east-1.amazonaws.com/ci/datadog-agent-builders/dd-agent-testing:latest
   <<: *run_when_testkitchen_triggered
   before_script:
@@ -749,24 +749,6 @@ kitchen_debian:
     paths:
       - $CI_PROJECT_DIR/kitchen_logs
 
-# run dd-agent-testing
-testkitchen_cleanup_s3:
-  stage: testkitchen_cleanup
-  image: 486234852809.dkr.ecr.us-east-1.amazonaws.com/ci/datadog-agent-builders/deploy:latest
-  <<: *run_when_testkitchen_triggered
-  tags: [ "runner:main", "size:large" ]
-  before_script:
-    - ls
-  # even if this fails, it shouldn't block the pipeline.
-  allow_failure: true
-  when: always
-  script:
-    - aws s3 rm s3://$DEB_TESTING_S3_BUCKET/dists/pipeline-$CI_PIPELINE_ID --recursive
-    - aws s3 rm s3://$RPM_TESTING_S3_BUCKET/pipeline-$CI_PIPELINE_ID --recursive
-    - aws s3 rm s3://$RPM_TESTING_S3_BUCKET/suse/pipeline-$CI_PIPELINE_ID --recursive
-    - aws s3 rm s3://$WINDOWS_TESTING_S3_BUCKET --recursive
-    - cd $OMNIBUS_PACKAGE_DIR
-    - for deb in $(ls *amd64.deb); do aws s3 rm s3://$DEB_TESTING_S3_BUCKET/pool/d/da/$deb --recursive; done
 
 # run dd-agent-testing
 testkitchen_cleanup_azure:
