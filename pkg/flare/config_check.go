@@ -20,7 +20,7 @@ import (
 )
 
 // ConfigCheckURL contains the Agent API endpoint URL exposing the loaded checks
-var ConfigCheckURL = fmt.Sprintf("https://localhost:%v/agent/config-check", config.Datadog.GetInt("cmd_port"))
+var ConfigCheckURL string
 
 // GetConfigCheck dump all loaded configurations to the writer
 func GetConfigCheck(w io.Writer, withDebug bool) error {
@@ -36,6 +36,9 @@ func GetConfigCheck(w io.Writer, withDebug bool) error {
 		return err
 	}
 
+	if ConfigCheckURL == "" {
+		ConfigCheckURL = fmt.Sprintf("https://localhost:%v/agent/config-check", config.Datadog.GetInt("cmd_port"))
+	}
 	r, err := util.DoGet(c, ConfigCheckURL)
 	if err != nil {
 		if r != nil && string(r) != "" {
