@@ -127,7 +127,7 @@ func TestZipConfigCheck(t *testing.T) {
 		w.Write(out)
 	}))
 	defer ts.Close()
-	ConfigCheckURL = ts.URL
+	configCheckURL = ts.URL
 
 	dir, err := ioutil.TempDir("", "TestZipConfigCheck")
 	if err != nil {
